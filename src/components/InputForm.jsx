@@ -17,17 +17,15 @@ const InputForm = () => {
     document.getElementById("my_modal_1").close();
     try {
       await addDoc(collection(db, "MyNotes"), {
-        username: 'Malahim',
+        username: "Malahim",
         noteTitle: title,
         noteContent: content,
         noteTime: serverTimestamp(),
       });
-    }
-    catch {
-      console.log("Error Occured")
-    }
-    finally {
-      console.log('Proccesing Done ')
+    } catch {
+      console.log("Error Occured");
+    } finally {
+      console.log("Proccesing Done ");
     }
   };
   // const addToNote = async () => {
@@ -74,7 +72,6 @@ const InputForm = () => {
             <div className="p-5 pt-0">
               <textarea
                 required
-
                 value={content}
                 placeholder="Take a note..."
                 rows={4}
@@ -82,7 +79,6 @@ const InputForm = () => {
                 onChange={(e) => setContent(e.target.value)}
               />
             </div>
-       
 
             <div className="flex justify-end p-3 bg-gray-700 rounded-b-lg">
               <div className="space-x-2">
