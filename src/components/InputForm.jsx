@@ -1,90 +1,113 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToDiary } from "../redux/reducer/DataSlice";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 const InputForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-
   const dispatch = useDispatch();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(title, content);
     dispatch(addToDiary({ diaryTitle: title, diaryContent: content }));
     setTitle("");
     setContent("");
-    // Add your form submission logic here
+    document.getElementById("my_modal_1").close();
+    try {
+      await addDoc(collection(db, "MyNotes"), {
+        username: 'Malahim',
+        noteTitle: title,
+        noteContent: content,
+        noteTime: serverTimestamp(),
+      });
+    }
+    catch {
+      console.log("Error Occured")
+    }
+    finally {
+      console.log('Proccesing Done ')
+    }
   };
+  // const addToNote = async () => {
+  //   try {
+  //     await addDoc(collection(db, "MyNotes"), {
+  //       username: 'Malahim',
+  //       noteTitle: title,
+  //       noteContent: content,
+  //       noteTime: serverTimestamp(),
+  //     });
+  //   }
+  //   catch {
+  //     console.log("Error Occured")
+  //   }
+  //   finally {
+  //     console.log('Proccesing Done ')
+  //   }
+
+  // }
 
   return (
     <>
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
       <button
-        className="btn"
+        className="btn bg-yellow-500 hover:bg-yellow-600 border-0 text-gray-900 shadow-md w-full font-medium"
         onClick={() => document.getElementById("my_modal_1").showModal()}
       >
-        open modal
+        + New Note
       </button>
+
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          {/* <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">
-            Press ESC key or click the button below to close
-          </p> */}
-          <div className="min-h-screen flex items-center justify-center p-4 bg-base-200">
-            <div className="card w-full max-w-md bg-base-100 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title text-2xl font-bold mb-4">
-                  Create New Note
-                </h2>
-                <form onSubmit={handleSubmit}>
-                  <div className="form-control mb-4">
-                    <label className="label">
-                      <span className="label-text font-medium">Title</span>
-                    </label>
-                    <input
-                      value={title}
-                      type="text"
-                      required
-                      placeholder="Note title"
-                      className="input input-bordered w-full focus:ring-2 focus:ring-primary"
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                  </div>
+        <div className="modal-box max-w-2xl p-0 rounded-lg shadow-xl relative top-20 bg-gray-800 border border-gray-700">
+          <form onSubmit={handleSubmit}>
+            <div className="p-5 pb-3">
+              <input
+                required
+                value={title}
+                type="text"
+                placeholder="Title"
+                className="w-full px-0 text-lg font-semibold placeholder-gray-500 bg-transparent border-0 border-b border-gray-600 focus:outline-none focus:border-yellow-500 focus:ring-0 text-gray-100"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
 
-                  <div className="form-control mb-6">
-                    <label className="label">
-                      <span className="label-text font-medium">Content</span>
-                    </label>
-                    <textarea
-                      value={content}
-                      required
-                      rows={5}
-                      placeholder="Write your note here..."
-                      className="textarea textarea-bordered w-full focus:ring-2 focus:ring-primary"
-                      onChange={(e) => setContent(e.target.value)}
-                    />
-                  </div>
+            <div className="p-5 pt-0">
+              <textarea
+                required
 
-                  <div className="card-actions justify-end">
-                    <button
-                      type="submit"
-                      className="btn btn-primary w-full md:w-auto"
-                    >
-                      Save Note
-                    </button>
-                  </div>
-                </form>
+                value={content}
+                placeholder="Take a note..."
+                rows={4}
+                className="w-full px-0 placeholder-gray-500 bg-transparent border-0 resize-none focus:outline-none focus:ring-0 text-gray-200"
+                onChange={(e) => setContent(e.target.value)}
+              />
+            </div>
+       
+
+            <div className="flex justify-end p-3 bg-gray-700 rounded-b-lg">
+              <div className="space-x-2">
+                <button
+                  type="button"
+                  className="btn bg-gray-600 hover:bg-gray-500 border-0 text-gray-200"
+                  onClick={() => document.getElementById("my_modal_1").close()}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn bg-yellow-500 hover:bg-yellow-600 border-0 text-gray-900 font-medium"
+                  disabled={!title.trim() && !content.trim()}
+                >
+                  Save
+                </button>
               </div>
             </div>
-          </div>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
-          </div>
+          </form>
         </div>
+
+        <form method="dialog" className="modal-backdrop bg-black/70">
+          <button>close</button>
+        </form>
       </dialog>
     </>
   );
