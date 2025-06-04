@@ -6,6 +6,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
 
@@ -15,6 +16,9 @@ const Card = () => {
   const [error, setError] = useState(null);
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
+  const [editId, setEditId] = useState();
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
 
   const getRandomHeight = (content) => {
     if (!content) return 150;
@@ -33,7 +37,10 @@ const Card = () => {
 
   useEffect(() => {
     // 1. Create query reference
-    const notesQuery = query(collection(db, "MyNotes"));
+    const notesQuery = query(
+      collection(db, "MyNotes"),
+      orderBy("noteTime", "desc")
+    );
 
     // 2. Set up real-time listener
     const unsubscribe = onSnapshot(
@@ -99,13 +106,31 @@ const Card = () => {
     console.log("Delete note function called", id);
     await deleteDoc(doc(db, "MyNotes", id));
   };
-  const noteEdit = () => {
+  const noteEdit = (id, TitleNew, ContentNew) => {
     document.getElementById("my_modal_2").showModal();
-    console.log("Edit note function called", id);
+    console.log("Edit note function called", editId);
+    console.log("New Title:", TitleNew);
+    console.log("New Content:", ContentNew);
+    setEditId(id);
+    setEditTitle(TitleNew);
+    setEditContent(ContentNew);
   };
-  const saveNote = async (id) => {
-    console.log("New Title:", newTitle);
-    console.log("New Content:", newContent);
+  const saveNote = async (e) => {
+    e.preventDefault();
+    console.log("Updated Title:", editTitle);
+    console.log("Updated Content:", editContent);
+    console.log("Note ID:", editId);
+
+    // Optional: Call Firestore to update the note
+    try {
+      await updateDoc(doc(db, "MyNotes", editId), {
+        noteTitle: editTitle,
+        noteContent: editContent,
+      });
+      document.getElementById("my_modal_2").close(); // close modal after save
+    } catch (error) {
+      console.error("Error updating note:", error);
+    }
   };
 
   return (
@@ -114,21 +139,88 @@ const Card = () => {
       {/* <button className="btn" onClick={() => noteEdit(item.id)}>
         open modal
       </button> */}
-      <dialog id="my_modal_2" className="modal">
+      {/* <dialog id="my_modal_2" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Edit Note</h3>
-          <form>
-            <input type="text" className="border"/>
-            <input type="text" className="border"/>
-            <button className="border cursor-pointer">Update Now</button>
-          </form>
+          <input
+            type="text"
+            className="border"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+          />
+          <textarea
+            required
+            value={editContent}
+            placeholder="Update Your Note Value"
+            rows={4}
+            className="w-full px-0 placeholder-gray-500 bg-transparent border-0 resize-none focus:outline-none focus:ring-0 text-gray-200"
+            onChange={(e) => setEditContent(e.target.value)}
+          />
+
+   
           <div className="modal-action">
             <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
+             
+              <button
+                onClick={(e) => saveNote(e)}
+                className="border cursor-pointer"
+              >
+                Update Now
+              </button>
             </form>
           </div>
         </div>
+      </dialog> */}
+      <dialog id="my_modal_2" className="modal">
+        <div className="modal-box bg-base-200 p-6 rounded-lg shadow-xl max-w-md">
+          <h3 className="font-bold text-2xl text-primary mb-4 pb-2 border-b border-base-300">
+            Edit Note
+          </h3>
+
+          <div className="space-y-4 mt-4">
+            <input
+              type="text"
+              className="input input-bordered w-full bg-base-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              placeholder="Note Title"
+            />
+
+            <textarea
+              required
+              value={editContent}
+              placeholder="Update your note content..."
+              rows={6}
+              className="textarea textarea-bordered w-full bg-base-100 focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+              onChange={(e) => setEditContent(e.target.value)}
+            />
+          </div>
+
+          <div className="modal-action mt-6 gap-3">
+            {/* Cancel button (closes modal without saving) */}
+            <form method="dialog">
+              <button className="btn btn-ghost hover:bg-base-300">
+                Cancel
+              </button>
+            </form>
+
+            {/* Update button (saves and closes modal) */}
+            <button
+              onClick={(e) => {
+                saveNote(e);
+                document.getElementById("my_modal_2").close();
+              }}
+              className="btn btn-primary px-6 text-white"
+            >
+              Update
+            </button>
+          </div>
+        </div>
+
+        {/* Backdrop click to close */}
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
       </dialog>
       <div className="columns-1 sm:columns-2 lg:columns-4 xl:columns-5 gap-5 p-4 md:p-8 mt-16 md:mt-0 ">
         {myNoteData.map((item, index) => {
@@ -140,6 +232,7 @@ const Card = () => {
               className="bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden flex flex-col border border-gray-700 mb-5 break-inside-avoid"
               style={{ height: `${cardHeight}px` }}
             >
+              {/* <p>{item.noteTime}</p> */}
               <div className="p-4 pb-2 flex-1 overflow-hidden">
                 {item.noteTitle && (
                   <h2 className="font-semibold text-gray-100 mb-2 line-clamp-2">
@@ -153,7 +246,9 @@ const Card = () => {
 
               <div className="p-2 bg-gray-700 flex justify-end gap-1 border-t border-gray-600">
                 <button
-                  onClick={() => noteEdit(item.id)}
+                  onClick={() =>
+                    noteEdit(item.id, item.noteTitle, item.noteContent)
+                  }
                   className="p-2 rounded-full hover:bg-gray-600 transition-colors duration-150"
                 >
                   <svg
