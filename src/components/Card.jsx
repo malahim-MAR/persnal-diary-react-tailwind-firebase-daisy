@@ -8,7 +8,8 @@ import {
   query,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { auth, db } from "../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Card = () => {
   const [myNoteData, setMyNoteData] = useState([]);
@@ -19,6 +20,7 @@ const Card = () => {
   const [editId, setEditId] = useState();
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
+  const [user, setUser] = useState(undefined);
 
   const getRandomHeight = (content) => {
     if (!content) return 150;
@@ -35,6 +37,13 @@ const Card = () => {
     return height;
   };
 
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+  //     setUser(firebaseUser || null);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+  // console.log("User:", user.email);
   useEffect(() => {
     // 1. Create query reference
     const notesQuery = query(
