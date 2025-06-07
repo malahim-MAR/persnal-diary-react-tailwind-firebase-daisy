@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Card from "../components/Card";
 
 const Professional = () => {
   return (
-    <div>Professional</div>
-  )
-}
+    <>
+      <Card />
+    </>
+  );
+};
 
-export default Professional
+export default Professional;

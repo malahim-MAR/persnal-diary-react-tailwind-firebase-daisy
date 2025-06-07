@@ -191,6 +191,7 @@ import { useDispatch } from "react-redux";
 import { addToDiary } from "../redux/reducer/DataSlice";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import { getAuth } from "firebase/auth";
 
 const InputForm = () => {
   const [title, setTitle] = useState("");
@@ -198,6 +199,8 @@ const InputForm = () => {
   const [noteType, setNoteType] = useState("General");
   const dispatch = useDispatch();
 
+  const auth = getAuth();
+  const user = auth.currentUser;
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(addToDiary({ diaryTitle: title, diaryContent: content }));
@@ -206,7 +209,7 @@ const InputForm = () => {
     document.getElementById("my_modal_1").close();
     try {
       await addDoc(collection(db, "MyNotes"), {
-        username: "Malahim",
+        userEmail: user.email,
         noteTitle: title,
         noteContent: content,
         typeOfNote: noteType,

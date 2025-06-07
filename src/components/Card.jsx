@@ -7,9 +7,11 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 const Card = () => {
   const [myNoteData, setMyNoteData] = useState([]);
@@ -28,7 +30,7 @@ const Card = () => {
     const charCount = content.length;
 
     // Base height calculation
-    let height = 100 + lineCount * 20 + charCount / 30;
+    let height = 130 + lineCount * 20 + charCount / 30;
 
     // Apply min/max constraints
     height = Math.max(height, 150); // Minimum height
@@ -44,11 +46,14 @@ const Card = () => {
   //   return () => unsubscribe();
   // }, []);
   // console.log("User:", user.email);
+  const auth = getAuth();
+  const userEmail = auth.currentUser;
   useEffect(() => {
     // 1. Create query reference
     const notesQuery = query(
       collection(db, "MyNotes"),
-      orderBy("noteTime", "desc")
+      // orderBy("noteTime", "desc"),
+      where("userEmail", "==", userEmail.email)
     );
 
     // 2. Set up real-time listener
@@ -231,7 +236,7 @@ const Card = () => {
           <button>close</button>
         </form>
       </dialog>
-      <div className="columns-1 sm:columns-2 lg:columns-4 xl:columns-5 gap-5 p-4 md:p-8 mt-16 md:mt-0 ">
+      <div className="columns-1 sm:columns-2 lg:columns-4 xl:columns-4 gap-5 p-4 md:p-8 mt-16 md:mt-0 ">
         {myNoteData.map((item, index) => {
           const cardHeight = getRandomHeight(item.noteContent);
 
