@@ -6,6 +6,7 @@ import Professional from "../Pages/Professional.jsx";
 import Important from "../Pages/Important.jsx";
 import General from "../Pages/General.jsx";
 import Event from "../Pages/Event.jsx";
+import Shopping from "../Pages/Shopping.jsx";
 
 const routesBeforeLogin = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const routesBeforeLogin = createBrowserRouter([
       {
         path: "important-notes",
         element: <Important />,
+      },
+      {
+        path: "shopping-notes",
+        element: <Shopping />,
       },
       {
         path: "general-notes",
