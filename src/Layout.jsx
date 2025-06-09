@@ -24,15 +24,13 @@ const Layout = () => {
 
   return (
     <>
-      <div className="flex min-h-screen bg-gray-900 text-gray-100">
+      {/* <div className="flex min-h-screen bg-gray-900 text-gray-100">
         {user && (
-          
-          
           <div className="drawer drawer-mobile">
-          <Header/>
+            <Header />
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col">
-              {/* Main content area */}
+        
               <div className="flex-1 p-4 md:ml-80">
                 <Outlet />
               </div>
@@ -43,7 +41,7 @@ const Layout = () => {
               )}
             </div>
 
-            {/* Sidebar */}
+        
             <div className="drawer-side">
               <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
               <div className="w-80 bg-gray-800 h-full border-r border-gray-700">
@@ -52,6 +50,24 @@ const Layout = () => {
             </div>
           </div>
         )}
+      </div> */}
+      <div className="flex min-h-screen bg-gray-900 text-gray-100">
+        {user && (
+          <div className="hidden md:block w-80 bg-gray-800 h-full fixed top-0 left-0 z-50">
+            <SideNavbar />
+          </div>
+        )}
+        {/* <SideNavbar /> */}
+        <div className="flex-1 flex flex-col">
+          <main className="flex-1 p-4 ml-0 md:ml-80">
+            <Outlet />
+          </main>
+          {user && (
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-800 p-4 z-50">
+              <Footer />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
