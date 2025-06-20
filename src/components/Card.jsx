@@ -279,7 +279,7 @@ const Card = ({ customFilter = [] }) => {
     const lineCount = content.split("\n").length;
     const charCount = content.length;
 
-    let height = 130 + lineCount * 20 + charCount / 30;
+    let height = 150 + lineCount * 20 + charCount / 30;
     height = Math.max(height, 150);
     height = Math.min(height, 400);
 

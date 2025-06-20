@@ -186,13 +186,13 @@ const SideNavbar = () => {
           <InputForm />
         </div>
 
-        <div className="form-control mb-6">
+        {/* <div className="form-control mb-6">
           <input
             type="text"
             placeholder="Search notes..."
             className="input w-full rounded-full bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400 focus:bg-gray-600 focus:ring-1 focus:ring-yellow-500"
           />
-        </div>
+        </div> */}
 
         <ul className="menu">
           <li className="menu-title">
@@ -293,7 +293,7 @@ const SideNavbar = () => {
             </Link>
           </li>
           
-          <li>
+          {/* <li>
             <Link to={"/daily-notes"}>
               <a className="flex gap-2 hover:bg-gray-700 rounded-lg text-gray-300">
                 <svg
@@ -311,7 +311,7 @@ const SideNavbar = () => {
                 Daily
               </a>
             </Link>
-          </li>
+          </li> */}
           
           <li>
             <Link to={"/event-notes"}>
