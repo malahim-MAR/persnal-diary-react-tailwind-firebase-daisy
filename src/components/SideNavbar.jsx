@@ -201,7 +201,7 @@ const SideNavbar = () => {
           
           {/* All Categories */}
           <li>
-            <Link to={"/general-notes"}>
+            <Link to={"/"}>
               <a className="flex gap-2 hover:bg-gray-700 rounded-lg text-gray-300">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +215,7 @@ const SideNavbar = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                General
+                All Notes
               </a>
             </Link>
           </li>

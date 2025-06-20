@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "../components/Card";
 
-const General = () => {
+const All = () => {
   return (
     <div>
       <Card />
@@ -9,4 +9,4 @@ const General = () => {
   );
 };
 
-export default General;
+export default All;
