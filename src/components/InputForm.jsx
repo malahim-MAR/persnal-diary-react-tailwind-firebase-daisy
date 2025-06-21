@@ -283,7 +283,7 @@ const InputForm = () => {
                     <option value="Grocery">Grocery</option>
                     <option value="Shopping">Shopping</option>
                     <option value="Ideas">Ideas</option>
-                    <option value="Daily">Daily</option>
+                    {/* <option value="Daily">Daily</option> */}
                     <option value="Event">Event</option>
                     <option value="IMPORTANT">IMPORTANT</option>
                   </select>
