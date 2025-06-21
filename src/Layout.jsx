@@ -30,7 +30,7 @@
 //             <Header />
 //             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
 //             <div className="drawer-content flex flex-col">
-        
+
 //               <div className="flex-1 p-4 md:ml-80">
 //                 <Outlet />
 //               </div>
@@ -41,7 +41,6 @@
 //               )}
 //             </div>
 
-        
 //             <div className="drawer-side">
 //               <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
 //               <div className="w-80 bg-gray-800 h-full border-r border-gray-700">
@@ -103,14 +102,15 @@ const Layout = () => {
       </div>
 
       {/* Main content area */}
-      <div className="relative z-10 min-h-screen flex flex-col">
-        <div className="flex-1">
+      <div className="outlet-main-parent relative z-10 min-h-screen flex flex-col">
+
+        <div className="flex-1 justify-center align-middle">
           <Outlet />
         </div>
-        
+
         {/* App Dock */}
         {user && (
-          <AppBar/>
+          <AppBar />
           // <div className="fixed bottom-0 left-0 right-0 flex justify-center z-50 pb-4">
           //   <div className="dock-container">
           //     <div className="app-dock">
@@ -130,7 +130,7 @@ const Layout = () => {
           //           </svg>
           //         </div>
           //       </a>
-                
+
           //       <a href="/professional-notes" className="app-icon" data-name="Professional">
           //         <div className="icon-bg">
           //           <svg
@@ -148,7 +148,7 @@ const Layout = () => {
           //           </svg>
           //         </div>
           //       </a>
-                
+
           //       <a href="/grocery-notes" className="app-icon" data-name="Grocery">
           //         <div className="icon-bg">
           //           <svg
@@ -161,7 +161,7 @@ const Layout = () => {
           //           </svg>
           //         </div>
           //       </a>
-                
+
           //       <a href="/shopping-notes" className="app-icon" data-name="Shopping">
           //         <div className="icon-bg">
           //           <svg
@@ -178,7 +178,7 @@ const Layout = () => {
           //           </svg>
           //         </div>
           //       </a>
-                
+
           //       <a href="/ideas-notes" className="app-icon" data-name="Ideas">
           //         <div className="icon-bg">
           //           <svg
@@ -191,7 +191,7 @@ const Layout = () => {
           //           </svg>
           //         </div>
           //       </a>
-                
+
           //       <a href="/event-notes" className="app-icon" data-name="Events">
           //         <div className="icon-bg">
           //           <svg
@@ -213,152 +213,6 @@ const Layout = () => {
           // </div>
         )}
       </div>
-
-      <style jsx>{`
-        .app-dock {
-          background: rgba(45, 45, 45, 0.7);
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-          border-radius: 24px;
-          padding: 12px 20px;
-          display: flex;
-          gap: 16px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 
-            0 10px 30px rgba(0, 0, 0, 0.3),
-            inset 0 1px 1px rgba(255, 255, 255, 0.1);
-          position: relative;
-          z-index: 10;
-        }
-        
-        .app-dock::after {
-          content: "";
-          position: absolute;
-          top: -10px;
-          left: 20%;
-          width: 60%;
-          height: 15px;
-          background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
-          border-radius: 50%;
-          opacity: 0.5;
-          filter: blur(3px);
-          z-index: -1;
-        }
-        
-        .app-icon {
-          position: relative;
-          display: flex;
-          justify-content: center;
-          transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        
-        .icon-bg {
-          width: 60px;
-          height: 60px;
-          border-radius: 16px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background: rgba(255, 255, 255, 0.9);
-          box-shadow: 
-            0 6px 15px rgba(0, 0, 0, 0.15),
-            inset 0 1px 2px rgba(255, 255, 255, 0.8),
-            inset 0 -1px 1px rgba(0, 0, 0, 0.05);
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .icon-bg::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 50%;
-          background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
-          border-radius: 16px 16px 0 0;
-          pointer-events: none;
-        }
-        
-        .app-icon:hover {
-          transform: scale(1.15) translateY(-15px);
-        }
-        
-        .app-icon:hover .icon-bg {
-          box-shadow: 
-            0 12px 25px rgba(0, 0, 0, 0.25),
-            inset 0 2px 3px rgba(255, 255, 255, 0.9),
-            inset 0 -2px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-        .app-icon::after {
-          content: attr(data-name);
-          position: absolute;
-          bottom: -30px;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 12px;
-          color: white;
-          background: rgba(0, 0, 0, 0.7);
-          padding: 4px 10px;
-          border-radius: 8px;
-          opacity: 0;
-          transition: all 0.3s ease;
-          font-weight: 500;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          letter-spacing: 0.5px;
-          white-space: nowrap;
-          pointer-events: none;
-        }
-        
-        .app-icon:hover::after {
-          opacity: 1;
-          transform: translateX(-50%) translateY(0);
-        }
-        
-        @media (max-width: 768px) {
-          .app-dock {
-            padding: 10px 16px;
-            gap: 12px;
-          }
-          
-          .icon-bg {
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-          }
-          
-          .app-icon:hover {
-            transform: scale(1.1) translateY(-10px);
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .app-dock {
-            padding: 8px 12px;
-            gap: 8px;
-            border-radius: 20px;
-          }
-          
-          .icon-bg {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-          }
-          
-          .app-icon:hover {
-            transform: scale(1.08) translateY(-8px);
-          }
-          
-          .app-icon::after {
-            font-size: 10px;
-            padding: 3px 8px;
-            bottom: -25px;
-          }
-        }
-      `}</style>
     </div>
   );
 };
